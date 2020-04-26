@@ -7,41 +7,43 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
 
 public class BookListAdapter extends ArrayAdapter<BookList> {
-
-    public BookListAdapter(@NonNull Context context, List<BookList> bookList) {
-        super(context, 0,bookList);
+    public BookListAdapter(@NonNull Context context, List<BookList>bookLists) {
+        super(context,0,bookLists);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-        View listItemView = convertView;
-        if(listItemView==null){
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.book_list_item,parent,false);
+        View listView = convertView;
+        if(listView == null) {
+           listView =  LayoutInflater.from(getContext()).inflate(R.layout.book_list_item, parent, false);
         }
 
-        BookList currentBook = getItem(position);
+        BookList bookList = getItem(position);
 
-        TextView titleView = listItemView.findViewById(R.id.title);
-        titleView.setText(currentBook.getTitle());
+        TextView titleView = listView.findViewById(R.id.title);
 
-        TextView author1View = listItemView.findViewById(R.id.author_1);
-        author1View.setText(currentBook.getAuthor1());
+        titleView.setText(bookList.getTitle());
 
-        TextView author2View = listItemView.findViewById(R.id.author_2);
-        author2View.setText(currentBook.getAuthor2());
+        TextView author1View = listView.findViewById(R.id.author_1);
 
-        TextView publisherView = listItemView.findViewById(R.id.publisher);
-        publisherView.setText(currentBook.getPublisher());
+        author1View.setText(bookList.getAuthor1());
 
-        return listItemView;
+        TextView author2View = listView.findViewById(R.id.author_2);
+
+        author2View.setText(bookList.getAuthor2());
+
+        TextView publisherView = listView.findViewById(R.id.publisher);
+
+        publisherView.setText(bookList.getPublisher());
+
+        return listView;
+
     }
 }
