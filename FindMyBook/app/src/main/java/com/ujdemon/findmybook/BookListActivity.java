@@ -42,22 +42,37 @@ public class BookListActivity extends AppCompatActivity  implements LoaderManage
 
         mAdapter = new BookListAdapter(this,new ArrayList<BookList>());
 
+
+
         listView.setAdapter(mAdapter);
 
-        mUrlFinal=(mUrl+searchView.getQuery()).trim();
 
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mUrlFinal=(mUrl+searchView.getQuery()).trim();
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if(networkInfo!=null && networkInfo.isConnected()){
-            LoaderManager.getInstance(this).initLoader(BOOK_LIST_LOADER_ID,null,this);
+                if(networkInfo!=null && networkInfo.isConnected()){
+                    LoaderManager.getInstance(BookListActivity.this).initLoader(BOOK_LIST_LOADER_ID,null,BookListActivity.this);
 
-        }else{
-            View loadingIndicator = findViewById(R.id.loading_indicator);
-            loadingIndicator.setVisibility(View.GONE);
+                }else{
+                    View loadingIndicator = findViewById(R.id.loading_indicator);
+                    loadingIndicator.setVisibility(View.GONE);
 
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
-        }
+                    mEmptyStateTextView.setText(R.string.no_internet_connection);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
 
     }
 
@@ -81,6 +96,7 @@ public class BookListActivity extends AppCompatActivity  implements LoaderManage
             mAdapter.addAll(bookLists);
         }
     }
+
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<BookList>> loader) {
